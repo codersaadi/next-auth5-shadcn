@@ -1,5 +1,4 @@
 "use server";
-import * as z from "zod";
 import { db } from "@/lib/db";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
@@ -9,7 +8,7 @@ import { sendEmailVerification } from "./common";
 
 
 export async function signInAction(
-    data: z.infer<typeof LoginSchema>,
+    data: LoginSchemaType,
   ): Promise<MessageResponse> {
       const validate = await LoginSchema.safeParseAsync(data);
       if (!validate.success) {
@@ -68,7 +67,7 @@ if (!user.emailVerified) {
   
 
 
-  import {  signOut } from "@//auth";
-import { LoginSchema } from "../auth.schema";
+  import {  signOut } from "@/auth";
+import { LoginSchema, LoginSchemaType } from "../auth.schema";
 import { createVerificationToken } from "../data";
 export { signOut };

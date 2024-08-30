@@ -1,53 +1,29 @@
 'use client'
-import * as z from 'zod';
-import React, {  useState, useTransition } from 'react';
+import React, {  useState } from 'react';
 import Link from 'next/link';
 import {  EyeClosedIcon, EyeOpenIcon, AvatarIcon } from '@radix-ui/react-icons'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
-
-import { Metadata } from 'next';
 import { LoginSchema } from '../auth.schema';
 import { signInAction } from '../lib/signin-action';
-import { useSignIn } from '../hooks';
 import AuthProvidersCTA from './AuthProvidersCTA';
 import FormFeedback from './FormFeedback';
+import { useFormSubmit } from '@/hooks/useFormSubmit';
 const SignInForm: React.FC = () => {
-  // sign in on the client with a provider
   const [showPassword ,setShowPassword] = useState(false)
-  const form = useSignIn();
-  const [message, setMessage] = React.useState<{
-    type: 'error' | 'success';
-    message: string
-  }>({
-    type: 'error',
-    message: ''
+  const {form, onSubmit, isPending,message} = useFormSubmit(LoginSchema, {
+         email : '',
+      password : ''
   })
-  const [isPending, startTransition] = useTransition();
-  const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    startTransition( () => {
-      signInAction(data).then(res=>  {
-        if (res && "message" in res) {
-          setMessage({
-            type: res.success ? "success" : "error",
-            message: res.message
-          })
-        }
-      })
-     
-    });
-
-  }
   return (
     <>
     <div className="">
     <h2 className="text-2xl font-bold mb-2">Sign In to Continue</h2>
     </div>
       <Form  {...form} >
-        <form className='flex flex-col gap-1' onSubmit={form.handleSubmit(onSubmit)}  >
+        <form className='flex flex-col gap-1' onSubmit={form.handleSubmit(onSubmit(signInAction))}  >
           <FormField 
             control={form.control}
             name={"email"}
@@ -115,10 +91,3 @@ const SignInForm: React.FC = () => {
 
 export default SignInForm;
 
-/**
- * Meta data for the signin form page 
- */
-export const metadata: Metadata = {
-  title: 'AppName - Signin to Continue ',
-  description: '...',
-}

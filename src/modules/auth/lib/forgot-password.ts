@@ -1,6 +1,6 @@
 "use server"
 
-import { ForgotPasswordSchema, ResetPasswordSchema } from "../auth.schema";
+import { ForgotPasswordSchema, ForgotPasswordSchemaType, ResetPasswordSchema, ResetPasswordSchemaType } from "../auth.schema";
 import { z } from "zod";
 import { MessageResponse } from "../types/auth";
 import { db } from "@/lib/db";
@@ -9,7 +9,7 @@ import ResetTokenRepo from "../data/resetpassword-token";
 import { getUserByEmail } from "../data";
 
 
-export async function forgotPasswordAction(  data: z.infer<typeof ForgotPasswordSchema>,) : Promise<MessageResponse> {
+export async function forgotPasswordAction(  data: ForgotPasswordSchemaType) : Promise<MessageResponse> {
     try {
         const validate = ForgotPasswordSchema.safeParse(data);
     if (!validate.success) {
@@ -59,7 +59,7 @@ export async function forgotPasswordAction(  data: z.infer<typeof ForgotPassword
 
 
 
-export async function resetPasswordAction(token: string, data : z.infer<typeof ResetPasswordSchema>) : Promise<MessageResponse> {
+export async function resetPasswordAction(token: string, data : ResetPasswordSchemaType) : Promise<MessageResponse> {
  try {
      
     

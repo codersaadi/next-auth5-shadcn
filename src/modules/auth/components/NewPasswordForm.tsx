@@ -1,51 +1,32 @@
 "use client"
 import { Form, FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form'
-import React, {useState, useTransition} from 'react'
-import { z } from 'zod';
+import React, {useState} from 'react'
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import {  EyeOpenIcon as EyeIcon, EyeClosedIcon as EyeOff } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button';
-import { useResetPassword } from '../hooks';
 import { ResetPasswordSchema } from '../auth.schema';
-import { resetPasswordAction } from '../lib/forgot-password';
 import FormFeedback from './FormFeedback';
+import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { resetPasswordAction } from '../lib/forgot-password';
 export default function NewPasswordForm({token} : {
     token?: string
 }) {
 
   const [showPassword ,setShowPassword] = useState(false)
- const form = useResetPassword();
- const [message, setMessage] = React.useState<{
-    type: 'error' | 'success';
-    message: string
-  }>({
-    type: 'error',
-    message: ''
-  })
-  const [isPending, startTransition] = useTransition();
-  const onSubmit = (data: z.infer<typeof ResetPasswordSchema>) => {
-    setMessage({type : 'error', message: ''})
-   if (!token) {
-    setMessage({
-      type: 'error',
-      message: 'Invalid token'
-    })  
-    return 
-  }
-    startTransition(() => {
-      resetPasswordAction(token , data).then(res=>  setMessage({
-        type: res.success ? "success" : "error",
-        message: res.message
-      }))
-    });
-
-  }
+const {form, isPending, message, onSubmit} = useFormSubmit(ResetPasswordSchema, {
+  password : "",
+  confirmPassword :""
+})
+const submitAction = onSubmit(async (data) => {
+  if (!token) return {message : "token not found", success : false}
+  return await resetPasswordAction(token, data) 
+})
     return (
         <>
         <h2 className="text-2xl font-bold mb-2">Reset Your Password</h2>
       <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(submitAction)}>
       <FormField
             control={form.control}
             name={"password"}

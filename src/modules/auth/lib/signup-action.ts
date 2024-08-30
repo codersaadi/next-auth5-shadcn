@@ -1,13 +1,12 @@
 "use server";
-import * as z from "zod";
 import { db } from "@/lib/db";
 import { MessageResponse } from "../types/auth";
 import { hashMyPassword, sendEmailVerification } from "./common";
-import { SignupSchema } from "../auth.schema";
+import {  SignupSchema, SignupSchemaType } from "../auth.schema";
 import { createVerificationToken } from "../data";
 
 export async function signUpAction(
-  data: z.infer<typeof SignupSchema>,
+  data: SignupSchemaType,
 ): Promise<MessageResponse> {
   const validate = SignupSchema.safeParse(data);
 

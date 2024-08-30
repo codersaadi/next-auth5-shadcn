@@ -9,35 +9,22 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SignupSchema } from '../auth.schema';
 import { signUpAction } from '../lib/signup-action';
-import { useSignUp } from '../hooks';
 import AuthProvidersCTA from './AuthProvidersCTA';
 import FormFeedback from './FormFeedback';
+import { useFormSubmit } from '@/hooks/useFormSubmit';
 const SignUpForm: React.FC = () => {
-  const form = useSignUp();
   const [showPassword ,setShowPassword] = useState(false)
-  const [message, setMessage] = React.useState<{
-    type: 'error' | 'success';
-    message: string
-  }>({
-    type: 'error',
-    message: ''
-  })
-  const [isPending, startTransition] = useTransition();
-  const onSubmit = (data: z.infer<typeof SignupSchema>) => {
-    startTransition(() => {
-      signUpAction(data).then(res=>  setMessage({
-        type: res.success ? "success" : "error",
-        message: res.message
-      }))
-    });
-
-  }
+   const {form, message , isPending, onSubmit} = useFormSubmit(SignupSchema, {
+    email : '',
+    password : '',
+    name : ''
+   })
 
   return (
     <>
       <h2 className="text-2xl font-bold">Create a New Account</h2>
       <Form  {...form} >
-        <form className='flex flex-col ' onSubmit={form.handleSubmit(onSubmit)}  >
+        <form className='flex flex-col ' onSubmit={form.handleSubmit(onSubmit(signUpAction))}  >
         <FormField
             control={form.control}
             name={"name"}
