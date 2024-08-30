@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -37,6 +38,11 @@ export default function Home() {
           height={37}
           priority
         />
+
+      <p className="text-4xl  uppercase font-mono px-4 font-bold">
+        With <Link href={"#"}>
+        Auth.js</Link>
+      </p>
       </div>
 
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
