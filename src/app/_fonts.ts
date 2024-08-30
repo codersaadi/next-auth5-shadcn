@@ -1,5 +1,5 @@
-import { Inter } from "next/font/google";
-const inter = Inter({ subsets: ["latin"] , variable : "--font-inter"});
+import {  Roboto_Serif } from "next/font/google";
+const inter = Roboto_Serif({ subsets: ["latin"] , variable : "--font-robo-serif"});
 
 const fonts = {
   inter,

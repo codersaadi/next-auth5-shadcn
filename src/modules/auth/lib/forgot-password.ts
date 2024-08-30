@@ -6,7 +6,7 @@ import { MessageResponse } from "../types/auth";
 import { db } from "@/lib/db";
 import { hashMyPassword, sendResetPasswordEmail } from "./common";
 import ResetTokenRepo from "../data/resetpassword-token";
-import { getUserByEmail } from "../data";
+import userRepository from "../data/user";
 
 
 export async function forgotPasswordAction(  data: ForgotPasswordSchemaType) : Promise<MessageResponse> {
@@ -20,7 +20,7 @@ export async function forgotPasswordAction(  data: ForgotPasswordSchemaType) : P
     }
     const { email } = validate.data;
     // send email with reset password link
-    const existingUser = await  getUserByEmail(email);
+    const existingUser = await  userRepository.getUserByEmail(email);
     if (!existingUser) {
         return {
         message: "user not found",
@@ -91,7 +91,7 @@ export async function resetPasswordAction(token: string, data : ResetPasswordSch
     }
 
     // update password
-    const user = await getUserByEmail(tokenExists.email);
+    const user = await userRepository.getUserByEmail(tokenExists.email);
     if (!user) {
         return {
         message: "User not found",

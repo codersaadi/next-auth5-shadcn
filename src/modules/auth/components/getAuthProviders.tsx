@@ -19,7 +19,7 @@ export default function getAuthProviders() {
           Icon: GithubIcon
         }
         , {
-          name: 'Facebook',
+          name: 'facebook',
           id: 'facebook',
           Icon: FBIcon
         }

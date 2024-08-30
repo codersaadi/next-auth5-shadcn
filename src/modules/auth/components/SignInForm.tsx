@@ -1,7 +1,7 @@
 'use client'
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import {  EyeClosedIcon, EyeOpenIcon, AvatarIcon } from '@radix-ui/react-icons'
+import { EyeClosedIcon, EyeOpenIcon, AvatarIcon } from '@radix-ui/react-icons'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -12,19 +12,19 @@ import AuthProvidersCTA from './AuthProvidersCTA';
 import FormFeedback from './FormFeedback';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 const SignInForm: React.FC = () => {
-  const [showPassword ,setShowPassword] = useState(false)
-  const {form, onSubmit, isPending,message} = useFormSubmit(LoginSchema, {
-         email : '',
-      password : ''
+  const [showPassword, setShowPassword] = useState(false)
+  const { form, onSubmit, isPending, message } = useFormSubmit(LoginSchema, {
+    email: '',
+    password: ''
   })
   return (
     <>
-    <div className="">
-    <h2 className="text-2xl font-bold mb-2">Sign In to Continue</h2>
-    </div>
+      <div className="">
+        <h2 className="text-2xl font-bold mb-2">Sign In to Continue</h2>
+      </div>
       <Form  {...form} >
         <form className='flex flex-col gap-1' onSubmit={form.handleSubmit(onSubmit(signInAction))}  >
-          <FormField 
+          <FormField
             control={form.control}
             name={"email"}
             render={({ field }) => (
@@ -33,16 +33,16 @@ const SignInForm: React.FC = () => {
                   Email
                 </FormLabel>
                 <FormControl>
-                  <div className="relative ">
-                    <Input disabled={isPending} placeholder='Email' type='email' {...field} className='rounded-2xl' />
-                    <AvatarIcon  className={cn(`top-2 w-5 h-5 right-2 absolute`)} />
+                  <div className="relative">
+                    <Input disabled={isPending} placeholder='Email' type='email' {...field} className='' />
+                    <AvatarIcon className={cn(`top-2 w-5 h-5 right-2 absolute`)} />
                   </div>
                 </FormControl>
                 <FormFeedback type="error" message={form.formState.errors.email?.message} />
               </FormItem>
             )}
           />
-               <FormField
+          <FormField
             control={form.control}
             name={"password"}
             render={({ field }) => (
@@ -52,11 +52,11 @@ const SignInForm: React.FC = () => {
                 </FormLabel>
                 <FormControl >
                   <div className='relative' >
-                    <Input disabled={isPending}  className='rounded-2xl' placeholder='*********' type={showPassword ?"text" :"password"} {...field} />
-                   <span className={cn(`top-2  hover:text-sky-500 cursor-pointer
-         right-2 absolute`)} onClick={()=> setShowPassword(!showPassword)}>
-                   {!showPassword ? <EyeOpenIcon className='w-5 h-5' /> : <EyeClosedIcon className='w-5 h-5' />  }
-                   </span>
+                    <Input disabled={isPending} className='' placeholder='*********' type={showPassword ? "text" : "password"} {...field} />
+                    <span className={cn(`top-2  hover:text-sky-500 cursor-pointer
+         right-2 absolute`)} onClick={() => setShowPassword(!showPassword)}>
+                      {!showPassword ? <EyeOpenIcon className='w-5 h-5' /> : <EyeClosedIcon className='w-5 h-5' />}
+                    </span>
                   </div>
                 </FormControl>
                 <FormFeedback type="error" message={form.formState.errors.password?.message} />
@@ -68,9 +68,9 @@ const SignInForm: React.FC = () => {
             message={message.message}
           />
 
-            <Link className='text-sm text-gray-500' href={'/auth/forgot-password'}>
-              Forgot Password?
-            </Link>
+          <Link className='text-sm text-gray-500' href={'/auth/forgot-password'}>
+            Forgot Password?
+          </Link>
           <Button disabled={isPending} type='submit' className='w-full rounded-full'>
             Sign In
           </Button>
@@ -84,7 +84,7 @@ const SignInForm: React.FC = () => {
           </span>
         </p>
       </Form>
-      <AuthProvidersCTA/>
+      <AuthProvidersCTA withDescription />
     </>
   );
 };

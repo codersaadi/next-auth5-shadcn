@@ -3,7 +3,7 @@ import authConfig from "./auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { UserRole } from "@prisma/client";
 import { db } from "@/lib/db";
-import { getUserById } from "./data";
+import userRepository from "./data/user";
 
 
 export  const nextAuth = NextAuth({
@@ -24,7 +24,7 @@ export  const nextAuth = NextAuth({
     async signIn({ user, account }) {
       if (account?.provider !== "credentials") return true;
       if (!user || !user.id) return false;
-      const existingUser = await getUserById(user.id);
+      const existingUser = await userRepository.getUserById(user.id);
       if (!existingUser || !existingUser.emailVerified) return false;
       return true;
     },
@@ -35,7 +35,7 @@ export  const nextAuth = NextAuth({
       const {token, user} = jwt
   
       if (!token.sub) return token;
-      const existingUser = await getUserById(token.sub);
+      const existingUser = await userRepository.getUserById(token.sub);
       if (!existingUser) return token;
       token.email = existingUser.email;
       token.name = existingUser.name;

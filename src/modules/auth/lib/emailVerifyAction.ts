@@ -1,7 +1,8 @@
 "use server";
 import { db } from "@/lib/db";
-import { getVerificationTokenByToken, getUserByEmail } from "../data";
+import { getVerificationTokenByToken } from "../data";
 import { MessageResponse } from "../types/auth";
+import userRepository from "../data/user";
 
 export async function emailVerifyAction(
   token?: string,
@@ -27,7 +28,7 @@ export async function emailVerifyAction(
         success: false,
       };
     //  check if user exists
-    const userExists = await getUserByEmail(dbToken.email);
+    const userExists = await userRepository.getUserByEmail(dbToken.email);
 
     if (!userExists)
       return {
