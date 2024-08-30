@@ -2,6 +2,12 @@
 
 A robust authentication solution for Next.js applications, leveraging NextAuth with custom enhancements like RBAC, multi-provider support, and email handling.
 
+## Tools,Adapter used in this.
+- Next.js
+- Typescript
+- Auth.js(v5)
+- Postgresql 
+-Prisma
 ## Getting Started
 ## Installation
 ```bash
