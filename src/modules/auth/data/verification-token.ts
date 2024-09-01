@@ -4,7 +4,8 @@ export async function getVerificationToken(email: string) {
   try {
     const t = await db.verificationToken.findFirst({
       where: {
-        email,
+        identifier : email,
+        
       },
     });
     return t;
@@ -15,9 +16,9 @@ export async function getVerificationToken(email: string) {
 }
 export async function getVerificationTokenByToken(token: string) {
   try {
-    const t = await db.verificationToken.findUnique({
+    const t = await db.verificationToken.findFirst({
       where: {
-        token,
+       token
       },
     });
     return t;
@@ -33,14 +34,17 @@ export async function createVerificationToken(email: string) {
     if (exists) {
       await db.verificationToken.delete({
         where: {
-          id: exists.id,
+        identifier_token : {
+          identifier : exists.identifier,
+          token : exists.token
+        }
         },
       });
     }
 //    creating a new token
     const token = await db.verificationToken.create({
       data: {
-        email,
+        identifier : email,
         token: v4.v4(),
         expires: new Date(Date.now() + 1000 * 60 * 60),
       },

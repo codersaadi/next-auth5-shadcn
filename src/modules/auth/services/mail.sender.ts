@@ -14,7 +14,9 @@ export class EmailService {
     });
   }
 
-
+  async getTransport(){
+    return this.transporter
+  }
 
   async sendResetPasswordEmail(email: string, verificationLink: string): Promise<boolean> {
     const year = "2024"
@@ -36,7 +38,7 @@ export class EmailService {
     const template = await TemplateService.getTemplate("verification.html", { verificationLink, year });
 
     const mailOptions = {
-      from: process.env.GMAIL_SENDER_EMAIL,
+      from: "emailverification@yourapp.com",
       to: email,
       subject: "Email Verification",
       html: template, // Use HTML template instead of plain text

@@ -11,7 +11,7 @@ export const publicRoutes: string[] = [
  * @type {string[]} 
  */
 export const authRoutes: string[] = [
-    '/auth/signin', '/auth/signup', '/auth/forgot-password', '/auth/new-password', "/auth/email_verify"
+    '/auth/signin', '/auth/signup', '/auth/forgot-password', '/auth/new-password', "/auth/email_verify", "/auth/verify-request"
 ]
 /**
  * Routes start with the api are used for api auth purpose 

@@ -30,8 +30,10 @@ export const SignupSchema = z.object({
     }),
     password: z.string().min(7, {message: 'Password is required'}),
     });
-
-
+export const MagicSignInSchema = z.object({    email: z.string().email({
+    message: 'Please enter a valid email address'
+})})
+export type MagicSignInType = z.infer<typeof MagicSignInSchema>
 export type ForgotPasswordSchemaType = z.infer<typeof ForgotPasswordSchema> 
 export type LoginSchemaType = z.infer<typeof LoginSchema>
 export type SignupSchemaType = z.infer<typeof SignupSchema>

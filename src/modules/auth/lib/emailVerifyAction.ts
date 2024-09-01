@@ -28,7 +28,7 @@ export async function emailVerifyAction(
         success: false,
       };
     //  check if user exists
-    const userExists = await userRepository.getUserByEmail(dbToken.email);
+    const userExists = await userRepository.getUserByEmail(dbToken.identifier);
 
     if (!userExists)
       return {
@@ -42,7 +42,7 @@ export async function emailVerifyAction(
       },
       data: {
         emailVerified: new Date(),
-        email: dbToken.email,
+        email: dbToken.identifier,
       },
     });
     

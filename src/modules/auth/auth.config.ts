@@ -4,10 +4,10 @@ import Github from "next-auth/providers/github";
 import bcrypt from "bcryptjs";
 import Google from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
-import Twitter from "next-auth/providers/twitter";
 import { LoginSchema } from "./auth.schema";
 import userRepository from "./data/user";
 export default {
+ trustHost : true,
   providers: [
     Credentials({
       credentials: {
@@ -33,14 +33,13 @@ export default {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       clientId: process.env.GOOGLE_CLIENT_ID,
     }),
-    Twitter({
-      clientSecret: process.env.AUTH_TWITTER_SECRET,
-      clientId: process.env.AUTH_TWITTER_ID,
-    }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     }),
+    
+    
+    
   ],
 } satisfies NextAuthConfig;
 

@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { MessageResponse } from "../types/auth";
-import { sendEmailVerification } from "./common";
+import {  sendEmailVerification } from "./common";
 
 
 
@@ -68,6 +68,33 @@ if (!user.emailVerified) {
 
 
   import {  signOut } from "@/auth";
-import { LoginSchema, LoginSchemaType } from "../auth.schema";
+import { LoginSchema, LoginSchemaType, MagicSignInType } from "../auth.schema";
 import { createVerificationToken } from "../data";
+import { isRedirectError } from "next/dist/client/components/redirect";
 export { signOut };
+
+
+export async function signinMagic(data : MagicSignInType){
+  try {
+     await signIn("http-email", { email : data.email})
+         return {
+      message : `Email Link Sent to ${data.email}`,
+      success : true
+    }
+  } catch (error) {
+    // let message = "";
+    // if (isRedirectError(error)) { 
+    //  throw error
+    // }
+    //  if (error instanceof AuthError && error.type === "AccessDenied" ) {
+      // message =   MAGIC_NOT_FOUND_ERROR
+    // } 
+    // if (error instanceof Error) {   
+      // message = error.message
+    // }
+      return {
+          message: JSON.stringify(error),
+          success : false
+      }
+  }
+}

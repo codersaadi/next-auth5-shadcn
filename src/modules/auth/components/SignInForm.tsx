@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { EyeClosedIcon, EyeOpenIcon, AvatarIcon } from '@radix-ui/react-icons'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
@@ -11,7 +11,11 @@ import { signInAction } from '../lib/signin-action';
 import AuthProvidersCTA from './AuthProvidersCTA';
 import FormFeedback from './FormFeedback';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
+const MagicLinkSigninForm = React.lazy(()=> import("@/modules/auth/components/MagicLinkSignin"))
+
+
 const SignInForm: React.FC = () => {
+
   const [showPassword, setShowPassword] = useState(false)
   const { form, onSubmit, isPending, message } = useFormSubmit(LoginSchema, {
     email: '',
@@ -19,9 +23,7 @@ const SignInForm: React.FC = () => {
   })
   return (
     <>
-      <div className="">
-        <h2 className="text-2xl font-bold mb-2">Sign In to Continue</h2>
-      </div>
+      <h2 className="text-2xl font-bold mb-2">Sign In to Continue</h2>
       <Form  {...form} >
         <form className='flex flex-col gap-1' onSubmit={form.handleSubmit(onSubmit(signInAction))}  >
           <FormField
@@ -84,10 +86,52 @@ const SignInForm: React.FC = () => {
           </span>
         </p>
       </Form>
-      <AuthProvidersCTA withDescription />
+
     </>
   );
 };
 
-export default SignInForm;
 
+const SignInComponent = ({searchParams} :{
+  searchParams : any
+}) => {
+  console.log(searchParams);
+  
+  const [withCredentials, setWithCredentials] = useState(searchParams["signin-with-link"] ? false : true);
+
+  const onSignInTypeChange = () => setWithCredentials(!withCredentials);
+
+  const changeButtonTitle = withCredentials
+    ? "Sign In With Magic Link"
+    : "Sign In With Credentials";
+
+  return (
+    <div className="relative w-full overflow-hidden">
+      <div
+        className={`flex transition-transform duration-500 ease-in-out ${
+          withCredentials ? 'translate-x-0' : '-translate-x-1/2'
+        }`}
+        style={{ width: '200%' }} // Ensure the container is wide enough for both forms
+      >
+        <div className="w-1/2 p-4 flex-shrink-0">
+          <SignInForm />
+        </div>
+        <div className="w-1/2 p-4 flex-shrink-0">
+     <Suspense fallback={<div></div>}>
+     <MagicLinkSigninForm />
+     </Suspense>
+        </div>
+      </div>
+      <Button
+        onClick={onSignInTypeChange}
+        variant="outline"
+        className="w-full rounded-full mt-3"
+      >
+        {changeButtonTitle}
+      </Button>
+      <AuthProvidersCTA />
+    </div>
+  );
+};
+
+export default SignInComponent;
