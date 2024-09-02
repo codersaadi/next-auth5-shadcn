@@ -39,7 +39,25 @@ GMAIL_SENDER_PASSWORD="gmail_apps_password_check_nodemailer"
 FACEBOOK_CLIENT_ID="your-secret"
 FACEBOOK_CLIENT_SECRET="your-secret"
 ```
+# ScreenShots
 
+### Home Page
+![Home Page](public/screenshots/home.png)
+
+### Login Page
+![Login Page](public/screenshots/login.png)
+
+### Sign In Page
+![Sign In Page](public/screenshots/signin.png)
+
+### Email Sign In
+![Email Sign In](public/screenshots/email_signin.png)
+
+### Signup Modal
+![Signup Modal](public/screenshots/signup_modal.png)
+
+### Intercepting Modal
+![Intercepting Modal](public/screenshots/intercepting_modal.png)
 
 # Features
  Credential-Based Authentication:
