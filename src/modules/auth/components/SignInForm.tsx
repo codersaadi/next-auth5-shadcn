@@ -93,10 +93,8 @@ const SignInForm: React.FC = () => {
 
 
 const SignInComponent = ({searchParams} :{
-  searchParams : any
+  searchParams : Record<string , number | string | null>
 }) => {
-  console.log(searchParams);
-  
   const [withCredentials, setWithCredentials] = useState(searchParams["signin-with-link"] ? false : true);
 
   const onSignInTypeChange = () => setWithCredentials(!withCredentials);
