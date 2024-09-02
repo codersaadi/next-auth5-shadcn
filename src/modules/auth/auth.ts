@@ -9,7 +9,9 @@ import { sendVerificationRequest } from "./sendRequest";
 export const nextAuth = NextAuth({
   pages: {
     signIn: "/auth/signin",
-    verifyRequest : "/auth/verify-request"
+    verifyRequest : "/auth/verify-request",
+    "error" : "/auth-error",
+    signOut : "/signout"
   },
   events: {
     linkAccount: async ({ user }) => {

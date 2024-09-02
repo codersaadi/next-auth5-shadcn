@@ -12,10 +12,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  auth
 }: {
   children: React.ReactNode;
-  auth: React.ReactNode;
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -27,7 +25,7 @@ export default function RootLayout({
           <div className="absolute top-0 left-0 px-4">
             <ThemeSwitch />
           </div>
-          {auth}
+          {/* {auth} */}
           {children}
         </Provider>
       </body>

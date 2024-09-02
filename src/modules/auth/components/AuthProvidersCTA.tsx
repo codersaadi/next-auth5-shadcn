@@ -5,7 +5,7 @@ import { signIn } from 'next-auth/react';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import getAuthProviders from './getAuthProviders';
+import useAuthProviders from '../../../hooks/useAuthProviders';
 import { availableProviders } from '../auth.config';
 
 export default function AuthProvidersCTA({
@@ -13,7 +13,7 @@ export default function AuthProvidersCTA({
 }: {
   withDescription?: boolean;
 }) {
-  const providers = getAuthProviders();
+  const providers = useAuthProviders();
 
   const handleSignIn = async (provider: availableProviders) => {
     try {

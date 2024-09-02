@@ -1,8 +1,8 @@
 "use client"
 import { useMemo } from "react"
-import GoogleIcon, { FBIcon, GithubIcon } from '../icons';
-import { availableProviders } from "../auth.config";
-export default function getAuthProviders() {
+import GoogleIcon, { FBIcon, GithubIcon } from '../modules/auth/icons';
+import { availableProviders } from "../modules/auth/auth.config";
+export default function useAuthProviders() {
     const providers: {
         name: string,
         id: availableProviders,

@@ -57,7 +57,7 @@ const SignInForm: React.FC = () => {
                     <Input disabled={isPending} className='' placeholder='*********' type={showPassword ? "text" : "password"} {...field} />
                     <span className={cn(`top-2  hover:text-sky-500 cursor-pointer
          right-2 absolute`)} onClick={() => setShowPassword(!showPassword)}>
-                      {!showPassword ? <EyeOpenIcon className='w-5 h-5' /> : <EyeClosedIcon className='w-5 h-5' />}
+                      {showPassword ? <EyeOpenIcon className='w-5 h-5' /> : <EyeClosedIcon className='w-5 h-5' />}
                     </span>
                   </div>
                 </FormControl>
@@ -82,7 +82,7 @@ const SignInForm: React.FC = () => {
             Create an Account!
           </Link>
           <span className='opacity-70'>
-            if you don't have one.
+            if you don&apos;t have one.
           </span>
         </p>
       </Form>
