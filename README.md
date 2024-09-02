@@ -11,8 +11,8 @@ A robust authentication solution for Next.js applications, leveraging NextAuth w
 ## Getting Started
 ## Installation
 ```bash
-git clone https://github.com/saadi925/next-auth-complete.git
-cd next-auth-complete
+git clone https://github.com/codersaadi/next-auth5-shadcn.git
+cd next-auth5-shadcn
 pnpm install 
 ```
 
