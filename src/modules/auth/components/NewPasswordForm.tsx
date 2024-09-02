@@ -9,6 +9,7 @@ import { ResetPasswordSchema } from '../auth.schema';
 import FormFeedback from './FormFeedback';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import { resetPasswordAction } from '../lib/forgot-password';
+import { LoadingSpinner } from '@/components/Spinner';
 export default function NewPasswordForm({token} : {
     token?: string
 }) {
@@ -70,7 +71,12 @@ const submitAction = onSubmit(async (data) => {
             )}
           />
          {message &&  <FormFeedback type={message.type} message={message.message} />}
-          <Button className={cn(`mt-2 w-full disabled:bg-gray-600`)} type='submit' disabled={isPending} >Reset Password</Button>
+         <Button disabled={isPending} type='submit' className='w-full mt-2 rounded-full'>
+            {isPending ?   (<>
+              Changing Password
+              <LoadingSpinner />
+            </>)  : "Change Password"}
+          </Button>
       </form>
       </Form>
     </>

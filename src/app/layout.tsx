@@ -22,10 +22,9 @@ export default function RootLayout({
       bg-gray-100 dark:bg-background       `}>
         <Provider>
          <Toaster  />
-          <div className="absolute top-0 left-0 px-4">
+          <div className="absolute top-0 right-0 px-4">
             <ThemeSwitch />
           </div>
-          {/* {auth} */}
           {children}
         </Provider>
       </body>

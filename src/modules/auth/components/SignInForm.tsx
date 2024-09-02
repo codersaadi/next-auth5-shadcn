@@ -11,6 +11,7 @@ import { signInAction } from '../lib/signin-action';
 import AuthProvidersCTA from './AuthProvidersCTA';
 import FormFeedback from './FormFeedback';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { LoadingSpinner } from '@/components/Spinner';
 const MagicLinkSigninForm = React.lazy(()=> import("@/modules/auth/components/MagicLinkSignin"))
 
 
@@ -74,17 +75,14 @@ const SignInForm: React.FC = () => {
             Forgot Password?
           </Link>
           <Button disabled={isPending} type='submit' className='w-full rounded-full'>
-            Sign In
+            {isPending ?   (<>
+           Signing In
+              <LoadingSpinner />
+            </>)  : "Sign In"}
           </Button>
+     
         </form>
-        <p className='mt-2'>
-          <Link className=' mr-2' href={'/auth/signup'}>
-            Create an Account!
-          </Link>
-          <span className='opacity-70'>
-            if you don&apos;t have one.
-          </span>
-        </p>
+   
       </Form>
 
     </>
@@ -111,15 +109,23 @@ const SignInComponent = ({searchParams} :{
         }`}
         style={{ width: '200%' }} // Ensure the container is wide enough for both forms
       >
-        <div className="w-1/2 p-4 flex-shrink-0">
+        <div className="w-1/2 p-1 flex-shrink-0">
           <SignInForm />
         </div>
-        <div className="w-1/2 p-4 flex-shrink-0">
+        <div className="w-1/2 p-1 flex-shrink-0">
      <Suspense fallback={<div></div>}>
      <MagicLinkSigninForm />
      </Suspense>
         </div>
       </div>
+      <p className='mt-2'>
+          <Link className=' mr-2' href={'/auth/signup'}>
+            Create an Account!
+          </Link>
+          <span className='opacity-70'>
+            if you don&apos;t have one.
+          </span>
+        </p>
       <Button
         onClick={onSignInTypeChange}
         variant="outline"

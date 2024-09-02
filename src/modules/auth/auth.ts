@@ -82,6 +82,7 @@ export const nextAuth = NextAuth({
       name: "Email",
       sendVerificationRequest: sendVerificationRequest,
       options: {
+       
       },
       maxAge: 60 * 60,
       from: "onboarding@codestacklab.com",

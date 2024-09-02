@@ -12,6 +12,7 @@ import { signUpAction } from '../lib/signup-action';
 import AuthProvidersCTA from './AuthProvidersCTA';
 import FormFeedback from './FormFeedback';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { LoadingSpinner } from '@/components/Spinner';
 const SignUpForm: React.FC = () => {
   const [showPassword ,setShowPassword] = useState(false)
    const {form, message , isPending, onSubmit} = useFormSubmit(SignupSchema, {
@@ -24,7 +25,7 @@ const SignUpForm: React.FC = () => {
     <>
       <h2 className="text-2xl font-bold">Create a New Account</h2>
       <Form  {...form} >
-        <form className='flex flex-col ' onSubmit={form.handleSubmit(onSubmit(signUpAction))}  >
+        <form className='flex flex-col p-1 ' onSubmit={form.handleSubmit(onSubmit(signUpAction))}  >
         <FormField
             control={form.control}
             name={"name"}
@@ -87,8 +88,11 @@ const SignUpForm: React.FC = () => {
           />}
 
 
-          <Button  disabled={isPending} type='submit' className='w-full bg-sky-600 text-white dark:hover:text-black mt-2'>
-            Sign Up
+<Button disabled={isPending} type='submit' className='w-full rounded-full mt-2'>
+            {isPending ?   (<>
+           Signing Up
+              <LoadingSpinner />
+            </>)  : "Sign Up"}
           </Button>
         </form>
         <p className='mt-2'>

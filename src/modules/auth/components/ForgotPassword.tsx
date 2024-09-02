@@ -8,6 +8,7 @@ import { forgotPasswordAction } from '../lib/forgot-password';
 import { ForgotPasswordSchema } from '../auth.schema';
 import FormFeedback from './FormFeedback';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { LoadingSpinner } from '@/components/Spinner';
 export default function ForgotPasswordForm() {
   const {form , isPending ,onSubmit, message} = useFormSubmit(ForgotPasswordSchema, {
     email : ""
@@ -36,7 +37,12 @@ export default function ForgotPasswordForm() {
             )}
           />
          {message &&  <FormFeedback type={message.type} message={message.message} />}
-          <Button className={cn(`mt-2 w-full disabled:bg-gray-600`)} type='submit' disabled={isPending} >Reset Password</Button>
+         <Button disabled={isPending} type='submit' className='w-full mt-2 rounded-full'>
+            {isPending ?   (<>
+              Resetting Password
+              <LoadingSpinner />
+            </>)  : "Confirm Reset Password"}
+          </Button>
       </form>
       </Form>
     </>

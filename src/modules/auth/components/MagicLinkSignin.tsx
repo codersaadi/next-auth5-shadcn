@@ -14,6 +14,7 @@ import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { HOST } from '@/constants'
+import { LoadingSpinner } from '@/components/Spinner'
 export default function MagicLinkSigninForm() {
   const { isPending, form, message, onSubmit } = useFormSubmit(MagicSignInSchema, {
     email: ""
@@ -46,8 +47,11 @@ export default function MagicLinkSigninForm() {
               </FormItem>
             )}
           />
-          <Button type='submit' className='w-full mt-2'>
-            SignIn with Email
+          <Button disabled={isPending} type='submit' className='w-full mt-2 rounded-full'>
+            {isPending ?   (<>
+            Sending Email
+              <LoadingSpinner />
+            </>)  : "Sign In With Email"}
           </Button>
         </form>
 {message && <MagicLinkFormMessage message={message}/>}
