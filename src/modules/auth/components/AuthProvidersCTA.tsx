@@ -5,7 +5,7 @@ import { signIn } from 'next-auth/react';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import useAuthProviders from '../../../hooks/useAuthProviders';
+import useAuthProviders from '../useAuthProviders';
 import { availableProviders } from '../auth.config';
 
 export default function AuthProvidersCTA({
