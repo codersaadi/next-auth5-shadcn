@@ -1,7 +1,6 @@
 "use server"
 
 import { ForgotPasswordSchema, ForgotPasswordSchemaType, ResetPasswordSchema, ResetPasswordSchemaType } from "../auth.schema";
-import { z } from "zod";
 import { MessageResponse } from "../types/auth";
 import { db } from "@/lib/db";
 import { hashMyPassword, sendResetPasswordEmail } from "./common";

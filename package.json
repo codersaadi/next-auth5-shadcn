@@ -27,6 +27,7 @@
     "nodemailer": "^6.9.14",
     "react": "^18",
     "react-dom": "^18",
+    "react-google-recaptcha-v3": "^1.10.1",
     "react-hook-form": "^7.53.0",
     "shadcn": "^1.0.0",
     "sonner": "^1.5.0",

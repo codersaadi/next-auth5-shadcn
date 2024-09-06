@@ -12,16 +12,18 @@ import AuthProvidersCTA from './AuthProvidersCTA';
 import FormFeedback from './FormFeedback';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import { LoadingSpinner } from '@/components/Spinner';
-const MagicLinkSigninForm = React.lazy(()=> import("@/modules/auth/components/MagicLinkSignin"))
-
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+const MagicLinkSigninForm = React.lazy(() => import("@/modules/auth/components/MagicLinkSignin"))
 
 const SignInForm: React.FC = () => {
-
+  // const {executeRecaptcha} = useGoogleReCaptcha()
   const [showPassword, setShowPassword] = useState(false)
   const { form, onSubmit, isPending, message } = useFormSubmit(LoginSchema, {
     email: '',
-    password: ''
-  })
+    password: '',
+    
+  },
+  )
   return (
     <>
       <h2 className="text-2xl font-bold mb-2">Sign In to Continue</h2>
@@ -75,14 +77,14 @@ const SignInForm: React.FC = () => {
             Forgot Password?
           </Link>
           <Button disabled={isPending} type='submit' className='w-full rounded-full'>
-            {isPending ?   (<>
-           Signing In
+            {isPending ? (<>
+              Signing In
               <LoadingSpinner />
-            </>)  : "Sign In"}
+            </>) : "Sign In"}
           </Button>
-     
+
         </form>
-   
+
       </Form>
 
     </>
@@ -90,8 +92,8 @@ const SignInForm: React.FC = () => {
 };
 
 
-const SignInComponent = ({searchParams} :{
-  searchParams : Record<string , number | string | null>
+const SignInComponent = ({ searchParams }: {
+  searchParams: Record<string, number | string | null>
 }) => {
   const [withCredentials, setWithCredentials] = useState(searchParams["signin-with-link"] ? false : true);
 
@@ -104,28 +106,27 @@ const SignInComponent = ({searchParams} :{
   return (
     <div className="relative w-full overflow-hidden">
       <div
-        className={`flex transition-transform duration-500 ease-in-out ${
-          withCredentials ? 'translate-x-0' : '-translate-x-1/2'
-        }`}
+        className={`flex transition-transform duration-500 ease-in-out ${withCredentials ? 'translate-x-0' : '-translate-x-1/2'
+          }`}
         style={{ width: '200%' }} // Ensure the container is wide enough for both forms
       >
         <div className="w-1/2 p-1 flex-shrink-0">
           <SignInForm />
         </div>
         <div className="w-1/2 p-1 flex-shrink-0">
-     <Suspense fallback={<div></div>}>
-     <MagicLinkSigninForm />
-     </Suspense>
+          <Suspense fallback={<div></div>}>
+            <MagicLinkSigninForm />
+          </Suspense>
         </div>
       </div>
       <p className='mt-2'>
-          <Link className=' mr-2' href={'/auth/signup'}>
-            Create an Account!
-          </Link>
-          <span className='opacity-70'>
-            if you don&apos;t have one.
-          </span>
-        </p>
+        <Link className=' mr-2' href={'/auth/signup'}>
+          Create an Account!
+        </Link>
+        <span className='opacity-70'>
+          if you don&apos;t have one.
+        </span>
+      </p>
       <Button
         onClick={onSignInTypeChange}
         variant="outline"

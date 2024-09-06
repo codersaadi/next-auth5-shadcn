@@ -11,9 +11,10 @@ export default function Provider({
   return (
     <NextThemeProvider>
       <TooltipProvider>
-        <SessionProvider>
+     <SessionProvider>
           {children}
         </SessionProvider>
+  
       </TooltipProvider>
     </NextThemeProvider>
   )
