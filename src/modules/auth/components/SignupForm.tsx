@@ -6,29 +6,46 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { SignupSchema } from '../auth.schema';
 import { signUpAction } from '../lib/signup-action';
 import AuthProvidersCTA from './AuthProvidersCTA';
 import FormFeedback from './FormFeedback';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import { LoadingSpinner } from '@/components/Spinner';
 import { toast } from '@/hooks/use-toast';
+import { SignupSchema } from '../auth.schema';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 const SignUpForm: React.FC<{
   searchParams?: Record<string, string | null | number>
 }> = ({ searchParams }) => {
   const callBackError = searchParams?.["callbackError"]
+const {executeRecaptcha} = useGoogleReCaptcha()
   const [showPassword, setShowPassword] = useState(false)
-  const { form, message, isPending, onSubmit } = useFormSubmit(SignupSchema, {
-    email: '',
-    password: '',
-    name: ''
+  const { form, message, isPending, onSubmit } = useFormSubmit({
+    schema: SignupSchema,
+    defaultValues: {
+      email: '',
+      password: '',
+      name: '',
+    }, captcha: {
+      enableCaptcha: true,
+      executeRecaptcha,
+      action: "credentials_signup",
+      tokenExpiryMs: 120000,
+    },
+    onSubmitAction: signUpAction
   })
   useEffect(() => {
     if (!callBackError) return
     toast({
-      title: "User does not exists or verified ",
-      variant: message.type === "error" ? "destructive" : "default",
-      description: "create a new account or verify your email first"
+      title: `User with this email ${searchParams["email"]} does not exists or verified `,
+      variant: "destructive",
+      description: <div className='text-sm'>
+        Create a New Account or Verify it exists
+        <p>
+          Occurred at  {searchParams["at"]}
+        </p>
+      </div>
+
     })
 
   }, [callBackError])
@@ -36,7 +53,7 @@ const SignUpForm: React.FC<{
     <>
       <h2 className="text-2xl font-bold">Create a New Account</h2>
       <Form  {...form} >
-        <form className='flex flex-col p-1 ' onSubmit={form.handleSubmit(onSubmit(signUpAction))}  >
+        <form className='flex flex-col p-1 ' onSubmit={onSubmit} >
           <FormField
             control={form.control}
             name={"name"}

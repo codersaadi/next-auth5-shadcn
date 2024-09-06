@@ -9,3 +9,4 @@ export const recaptcha_config = {
     project_id : "i-academy-381410",
 
 }
+

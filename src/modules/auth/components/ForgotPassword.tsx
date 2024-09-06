@@ -9,15 +9,28 @@ import { ForgotPasswordSchema } from '../auth.schema';
 import FormFeedback from './FormFeedback';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import { LoadingSpinner } from '@/components/Spinner';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 export default function ForgotPasswordForm() {
-  const {form , isPending ,onSubmit, message} = useFormSubmit(ForgotPasswordSchema, {
-    email : ""
+  const {executeRecaptcha} = useGoogleReCaptcha()
+  const {form , isPending ,onSubmit, message} = useFormSubmit({
+    schema : ForgotPasswordSchema,
+    onSubmitAction : forgotPasswordAction,
+    defaultValues :{
+      "email" : ""
+    },
+    captcha :{
+      enableCaptcha: true,
+      executeRecaptcha,
+      action: "forgotpassword_form",
+      tokenExpiryMs: 120000,
+    }
+
   })
     return (
         <>
         <h2 className="text-2xl font-bold mb-2">Reset Your Password</h2>
       <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit(forgotPasswordAction))}>
+      <form onSubmit={onSubmit}>
       <FormField
             control={form.control}
             name={"email"}

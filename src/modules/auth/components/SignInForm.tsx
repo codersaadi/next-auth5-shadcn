@@ -1,7 +1,7 @@
 'use client'
 import React, { Suspense, useState } from 'react';
 import Link from 'next/link';
-import { EyeClosedIcon, EyeOpenIcon, AvatarIcon } from '@radix-ui/react-icons'
+import { EyeClosedIcon, EyeOpenIcon, AvatarIcon, CheckCircledIcon } from '@radix-ui/react-icons'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -16,19 +16,29 @@ import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 const MagicLinkSigninForm = React.lazy(() => import("@/modules/auth/components/MagicLinkSignin"))
 
 const SignInForm: React.FC = () => {
-  // const {executeRecaptcha} = useGoogleReCaptcha()
+  const { executeRecaptcha } = useGoogleReCaptcha()
   const [showPassword, setShowPassword] = useState(false)
-  const { form, onSubmit, isPending, message } = useFormSubmit(LoginSchema, {
-    email: '',
-    password: '',
-    
-  },
-  )
+  const { form, onSubmit, isPending: submitting, message, captchaState } = useFormSubmit({
+    schema: LoginSchema,
+    defaultValues: {
+      email: "",
+      password: ""
+    },
+    captcha: {
+      enableCaptcha: true,
+      executeRecaptcha,
+      action: "credentials_signin",
+      tokenExpiryMs: 120000,
+    },
+    onSubmitAction: signInAction
+  })
+
+  const isPending = captchaState.validating || submitting
   return (
     <>
       <h2 className="text-2xl font-bold mb-2">Sign In to Continue</h2>
       <Form  {...form} >
-        <form className='flex flex-col gap-1' onSubmit={form.handleSubmit(onSubmit(signInAction))}  >
+        <form action={""} className='flex flex-col gap-1' onSubmit={onSubmit}  >
           <FormField
             control={form.control}
             name={"email"}
@@ -68,21 +78,38 @@ const SignInForm: React.FC = () => {
               </FormItem>
             )}
           />
-          <FormFeedback
+          {message && <FormFeedback
             type={message.type}
             message={message.message}
-          />
+          />}
 
           <Link className='text-sm text-gray-500' href={'/auth/forgot-password'}>
             Forgot Password?
           </Link>
-          <Button disabled={isPending} type='submit' className='w-full rounded-full'>
-            {isPending ? (<>
-              Signing In
-              <LoadingSpinner />
-            </>) : "Sign In"}
+          <Button
+            disabled={isPending}
+            type="submit"
+            className={cn(
+              "w-full mt-2 rounded-full transition-all duration-200",
+              {
+                " ": isPending,
+                "bg-blue-600 text-white dark:hover:text-black": !isPending
+              }
+            )}
+          >
+            {isPending ? (
+              <div className="flex  justify-center items-center space-x-2">
+                {<CheckCircledIcon className='w-5 h-5 text-emerald-600' />}
+                {captchaState.validating ? "Performing Security Check..." : "Submitting"}
+                {submitting && <LoadingSpinner />}
+              </div>
+            ) : (
+              "Sign In"
+            )}
           </Button>
+          <span>
 
+          </span>
         </form>
 
       </Form>

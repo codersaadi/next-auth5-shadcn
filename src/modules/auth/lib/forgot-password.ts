@@ -6,9 +6,11 @@ import { db } from "@/lib/db";
 import { hashMyPassword, sendResetPasswordEmail } from "./common";
 import ResetTokenRepo from "../data/resetpassword-token";
 import userRepository from "../data/user";
+import { reCaptchaSiteVerify } from "./recaptcha";
+import { CaptchaActionOptions } from "../types/captcha";
 
 
-export async function forgotPasswordAction(  data: ForgotPasswordSchemaType) : Promise<MessageResponse> {
+export async function forgotPasswordAction(  data: ForgotPasswordSchemaType, captchaOptions : CaptchaActionOptions) : Promise<MessageResponse> {
     try {
         const validate = ForgotPasswordSchema.safeParse(data);
     if (!validate.success) {
@@ -17,12 +19,20 @@ export async function forgotPasswordAction(  data: ForgotPasswordSchemaType) : P
         success: false,
         };
     }
+    const googleResponse = await reCaptchaSiteVerify(captchaOptions);
+
+    if (!googleResponse.success) {
+      return {
+        message: googleResponse.message,
+        success: false,
+      };
+    }
     const { email } = validate.data;
     // send email with reset password link
     const existingUser = await  userRepository.getUserByEmail(email);
     if (!existingUser) {
         return {
-        message: "user not found",
+        message: "user may not exist or verified",
         success: false,
         };
     }
@@ -93,7 +103,7 @@ export async function resetPasswordAction(token: string, data : ResetPasswordSch
     const user = await userRepository.getUserByEmail(tokenExists.email);
     if (!user) {
         return {
-        message: "User not found",
+        message: "user may not exist or verified",
         success: false,
         };
     }

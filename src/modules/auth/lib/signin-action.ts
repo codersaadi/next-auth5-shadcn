@@ -6,8 +6,9 @@ import { MessageResponse } from "../types/auth";
 import { sendEmailVerification } from "./common";
 
 export async function signInAction(
-  data: LoginSchemaType
+  data: LoginSchemaType, captchaOptions : CaptchaActionOptions
 ): Promise<MessageResponse> {
+  
   const validate = await LoginSchema.safeParseAsync(data);
   if (!validate.success) {
     return {
@@ -15,7 +16,14 @@ export async function signInAction(
       success: false,
     };
   }
+  const googleResponse = await reCaptchaSiteVerify(captchaOptions);
 
+  if (!googleResponse.success) {
+    return {
+      message: googleResponse.message,
+      success: false,
+    };
+  }
   const { email, password } = validate.data;
   const user = await db.user.findUnique({
     where: { email },
@@ -64,6 +72,8 @@ export async function signInAction(
 import { signOut } from "@/auth";
 import { LoginSchema, LoginSchemaType } from "../auth.schema";
 import { createVerificationToken } from "../data";
+import { CaptchaActionOptions } from "../types/captcha";
+import { reCaptchaSiteVerify } from "./recaptcha";
 
 export { signOut };
 

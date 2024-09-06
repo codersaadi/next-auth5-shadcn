@@ -4,9 +4,11 @@ import { MessageResponse } from "../types/auth";
 import { hashMyPassword, sendEmailVerification } from "./common";
 import {  SignupSchema, SignupSchemaType } from "../auth.schema";
 import { createVerificationToken } from "../data";
+import { reCaptchaSiteVerify } from "./recaptcha";
+import { CaptchaActionOptions } from "../types/captcha";
 
 export async function signUpAction(
-  data: SignupSchemaType,
+  data: SignupSchemaType,captchaOptions : CaptchaActionOptions
 ): Promise<MessageResponse> {
   const validate = SignupSchema.safeParse(data);
 
@@ -16,6 +18,15 @@ export async function signUpAction(
       success: false,
     };
   }
+  const googleResponse = await reCaptchaSiteVerify(captchaOptions);
+
+    if (!googleResponse.success) {
+      return {
+        message: googleResponse.message,
+        success: false,
+      };
+    }
+
   const { email, password, name } = validate.data;
   try {
     const userExists = await db.user.findUnique({

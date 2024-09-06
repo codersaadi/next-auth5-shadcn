@@ -1,5 +1,6 @@
 "use server";
 import { recaptcha_config } from "@/constants";
+import { CaptchaActionOptions } from "../types/captcha";
 
 interface GoogleCaptchaResponse {
   success: boolean;
@@ -12,14 +13,11 @@ interface GoogleCaptchaResponse {
 export async function reCaptchaSiteVerify({
   token,
   action,
-  msTokenAge = 120000 //ms
-}: {
-  token?: string;
-  action?: string;
-  msTokenAge? : number }) {
+  tokenExpiryMs = 120000, //ms
+}: CaptchaActionOptions) {
   try {
+    
     if (!token) {
-      if (process.env.NODE_ENV !== "production")
         console.error("Captcha token missing");
       return {
         message: "Captcha verification failed. Please try again.",
@@ -45,7 +43,7 @@ export async function reCaptchaSiteVerify({
     const tokenTimestamp = new Date(googleResponse.challenge_ts).getTime();
     const currentTime = Date.now();
     const tokenAge = currentTime - tokenTimestamp;
-    if (tokenAge > msTokenAge) {
+    if (tokenAge > tokenExpiryMs) {
       return { success: false, message: "Captcha token expired." };
     }
 

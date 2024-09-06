@@ -7,18 +7,15 @@ import { HOST } from "@/constants";
 import { reCaptchaSiteVerify } from "./recaptcha";
 import { MagicSignInType } from "../auth.schema";
 import { signIn } from "@/auth";
+import { CaptchaActionOptions } from "../types/captcha";
 
 export async function signinMagic(
   data: MagicSignInType,
-  token?: string,
-  captchaAction?: string
+  captchaOptions : CaptchaActionOptions
 ) {
   try {
-    const googleResponse = await reCaptchaSiteVerify({
-      token,
-      action: captchaAction,
-      msTokenAge: 120000,
-    });
+    
+    const googleResponse = await reCaptchaSiteVerify(captchaOptions);
 
     if (!googleResponse.success) {
       return {
@@ -47,14 +44,13 @@ const handleSignInRedirectError = (
   let digest = error.digest;
   const replace = "NEXT_REDIRECT;replace;";
   const isNotFound = replace + HOST + "/auth/signup;303;" === error.digest;
-  console.log(error.digest);
   const successDigest =
     replace +
     HOST +
     "/api/auth/verify-request?provider=http-email&type=email;303;";
   const isSuccess = error.digest === successDigest;
   if (isNotFound)
-    digest = replace + `${HOST}/auth/signup?callbackError=badSignInEmail;303`;
+    digest = replace + `${HOST}/auth/signup?callbackError=badSignInEmail&email=${data.email}&at=${(new Date).toLocaleTimeString()};303`;
   else if (isSuccess) {
     digest =
       replace +
