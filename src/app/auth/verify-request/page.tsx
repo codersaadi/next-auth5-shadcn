@@ -2,7 +2,11 @@ import { logoUrl } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 
-const VerifyRequest = () => {
+const VerifyRequest = ({searchParams} :{
+  searchParams : Record<string , string | null |number>
+}) => {
+    const email = searchParams?.email
+    
     return (
       <div className=" flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
@@ -16,7 +20,9 @@ const VerifyRequest = () => {
               Check your email
             </h2>
             <p className="mt-2 text-center text-sm ">
-              We have sent a sign-in link to your email address.
+              We have sent a sign-in link to your email address. {email && (
+                <span className="px-3 text-sky-600 font-semibold text-lg">{email}</span>
+              )}
             </p>
           </div>
           <div className="mt-8 space-y-6">

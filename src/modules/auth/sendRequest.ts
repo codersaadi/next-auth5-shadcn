@@ -21,7 +21,7 @@ export async function sendVerificationRequest(params: {
   const { identifier, url, provider, theme } = params;
   const { host } = new URL(url);
   const service = new EmailService();
-  const transport = await service.getTransport();
+  const transport =  service.getTransport();
 
   try {
     const result = await transport.sendMail({
@@ -38,7 +38,7 @@ export async function sendVerificationRequest(params: {
     }
   } catch (error) {
     console.error("Error sending verification email:", error);
-    throw error;
+    // throw error;
   }
 }
 function generateHTML(params: { url: string; host: string; theme: EmailTheme }) {

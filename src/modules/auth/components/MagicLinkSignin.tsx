@@ -1,26 +1,29 @@
 "use client"
 import { useFormSubmit } from '@/hooks/useFormSubmit'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { MagicSignInSchema } from '../auth.schema'
-import { signIn } from '@/auth'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import FormFeedback from './FormFeedback'
 import { AvatarIcon } from '@radix-ui/react-icons'
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { signinMagic } from '../lib/signin-action'
-import { toast } from '@/hooks/use-toast'
-import { useRouter } from 'next/navigation'
-import { isRedirectError } from 'next/dist/client/components/redirect'
-import { HOST } from '@/constants'
 import { LoadingSpinner } from '@/components/Spinner'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { signinMagic } from '../lib/signin_magic-action'
 export default function MagicLinkSigninForm() {
-  const { isPending, form, message, onSubmit } = useFormSubmit(MagicSignInSchema, {
+  const { executeRecaptcha } = useGoogleReCaptcha()
+  const { isPending, form, message, onSubmit, captchaValidating } = useFormSubmit(MagicSignInSchema, {
     email: ""
-  })
- 
+  },
+    {
+      enableCaptcha: true,
+      executeRecaptcha,
+      action: "email_signin"
+    }
+  )
   const submitAction = onSubmit(signinMagic)
+
   return (
     <>
       <h2 className='font-semibold'>
@@ -47,35 +50,17 @@ export default function MagicLinkSigninForm() {
               </FormItem>
             )}
           />
-          <Button disabled={isPending} type='submit' className='w-full mt-2 rounded-full'>
-            {isPending ?   (<>
-            Sending Email
+          <Button disabled={captchaValidating || isPending} type='submit' className='w-full mt-2 rounded-full'>
+            {captchaValidating || isPending ? (<>
+              {captchaValidating ? "Performing security check..." : "Sending Email"}
               <LoadingSpinner />
-            </>)  : "Sign In With Email"}
+            </>) : "Sign In With Email"}
           </Button>
         </form>
-{message && <MagicLinkFormMessage message={message}/>}
+        {message &&
+          <FormFeedback message={message.message} type={message.type} />
+        }
       </Form>
     </>
   )
-}
-
-const MagicLinkFormMessage = ({message} :{message  :  {message : string, type : "error" | "success"}}) =>{
- const router =  useRouter()
-  useEffect(() => {
-    if (message && message.message) {
-      const error = JSON.parse(message.message)
-     const isRedirect = error?.digest ===  `NEXT_REDIRECT;replace;${HOST}/api/auth/verify-request?provider=http-email&type=email;303;`
-      if (isRedirectError(error)) {
-        if (!isRedirect) {
-          toast({
-            title: "User may not exist or verified,Sign Up First",
-            variant: message.type === "error" ? "destructive" : "default"
-          })
-        }
-      }
-      throw error
-    }
-  }, [message])
-  return null
 }

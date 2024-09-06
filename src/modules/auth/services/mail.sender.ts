@@ -14,7 +14,7 @@ export class EmailService {
     });
   }
 
-  async getTransport(){
+   getTransport(){
     return this.transporter
   }
 
