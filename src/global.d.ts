@@ -12,5 +12,7 @@ namespace NodeJS {
         HOST : string;
         FACEBOOK_CLIENT_ID : string
         FACEBOOK_CLIENT_SECRET : string
+        NEXT_PUBLIC_RECAPTCHA_SITE_KEY : string
+        RECAPTCHA_SECRET : string
     }
   }
