@@ -54,10 +54,5 @@ class ResetPasswordTokenRepository {
   }
 
 }
-let resetTokenRepo : ResetPasswordTokenRepository | null = null
-const getResetTokenRepo = () : ResetPasswordTokenRepository => {
-if (!resetTokenRepo) resetTokenRepo = new ResetPasswordTokenRepository()
-return resetTokenRepo
-}
-const ResetTokenRepo = getResetTokenRepo()
+const ResetTokenRepo = new ResetPasswordTokenRepository()
 export default ResetTokenRepo

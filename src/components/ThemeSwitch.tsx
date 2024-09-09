@@ -1,38 +1,29 @@
-"use client"
-import { MoonIcon as Moon, SunIcon as Sun } from "@radix-ui/react-icons"
-import { useTheme } from "next-themes"
-
-import { Button } from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
-export function ThemeSwitch() {
-    const { setTheme } = useTheme()
-
-    return (
-        <DropdownMenu >
-            <DropdownMenuTrigger className="bg-blackest" asChild>
-                <Button variant="outline"  size="icon">
-                    <Sun className="h-[1rem] w-[1rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span className="sr-only">Toggle theme</span>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
-    )
+'use client'
+import { MoonIcon, SunIcon } from '@radix-ui/react-icons'
+import { useTheme } from 'next-themes'
+import Image from 'next/image'
+import React, { useEffect } from 'react'
+export  function ThemeSwitch() {
+  const DARK_THEME = 'dark'
+  const LIGHT_THEME = 'light'
+  const [mounted, setMounted] = React.useState(false)
+  const {setTheme, resolvedTheme} = useTheme()
+   useEffect(()=> setMounted(true), [])
+   if (!mounted) {
+    return  <Image
+    src="data:image/svg+xml;base64,PHN2ZyBzdHJva2U9IiNGRkZGRkYiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMCIgdmlld0JveD0iMCAwIDI0IDI0IiBoZWlnaHQ9IjIwMHB4IiB3aWR0aD0iMjAwcHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB4PSIyIiB5PSIyIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHJ4PSIyIj48L3JlY3Q+PC9zdmc+Cg=="
+    width={21}
+    height={21}
+    sizes="21x21"
+    alt="Loading Light/Dark Toggle"
+    priority={false}
+    title="Loading Light/Dark Toggle"
+  />
+   }
+   if (resolvedTheme === DARK_THEME) {
+    return <SunIcon className='w-6 h-6 text-violet-600  ' onClick={()=> setTheme(LIGHT_THEME)}/>
+   }
+   if (resolvedTheme === LIGHT_THEME) {
+    return <MoonIcon className='w-6 h-6  text-violet-600  rounded-md' onClick={()=> setTheme(DARK_THEME)}/>
+   }
 }

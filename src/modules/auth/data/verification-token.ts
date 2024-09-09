@@ -1,5 +1,7 @@
 import { db } from "@/lib/db";
 import * as v4 from "uuid";
+
+
 export async function getVerificationToken(email: string) {
   try {
     const t = await db.verificationToken.findFirst({

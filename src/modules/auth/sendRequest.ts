@@ -1,6 +1,7 @@
 import { NodemailerConfig } from "next-auth/providers/nodemailer";
 import { EmailService } from "./services/mail.sender";
 import { logoUrl } from "@/constants";
+import { db } from "@/lib/db";
 
 export interface EmailTheme {
   colorScheme?: "auto" | "dark" | "light";
@@ -18,11 +19,17 @@ export async function sendVerificationRequest(params: {
   theme: EmailTheme;
   request: Request;
 }) {
+ 
   const { identifier, url, provider, theme } = params;
   const { host } = new URL(url);
   const service = new EmailService();
   const transport =  service.getTransport();
-
+  await db.verificationToken.deleteMany({
+    where: {
+      identifier,
+      token: { not: params.token },
+    },
+  });
   try {
     const result = await transport.sendMail({
       to: identifier,

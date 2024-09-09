@@ -93,7 +93,7 @@ const SignInForm: React.FC = () => {
               "w-full mt-2 rounded-full transition-all duration-200",
               {
                 " ": isPending,
-                "bg-blue-600 text-white dark:hover:text-black": !isPending
+                "bg-violet-600  text-white hover:bg-violet-800": !isPending
               }
             )}
           >

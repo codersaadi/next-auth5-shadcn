@@ -40,12 +40,12 @@ export async function reCaptchaSiteVerify({
       };
     }
 
-    const tokenTimestamp = new Date(googleResponse.challenge_ts).getTime();
-    const currentTime = Date.now();
-    const tokenAge = currentTime - tokenTimestamp;
-    if (tokenAge > tokenExpiryMs) {
-      return { success: false, message: "Captcha token expired." };
-    }
+    // const tokenTimestamp = new Date(googleResponse.challenge_ts).getTime();
+    // const currentTime = Date.now();
+    // const tokenAge = currentTime - tokenTimestamp;
+    // if (tokenAge > tokenExpiryMs) {
+    //   return { success: false, message: "Captcha token expired." };
+    // }
 
     return { success: true, message: "Captcha verified successfully." };
   } catch (error) {

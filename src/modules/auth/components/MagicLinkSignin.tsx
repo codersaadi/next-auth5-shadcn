@@ -65,7 +65,7 @@ export default function MagicLinkSigninForm() {
               "w-full mt-2 rounded-full transition-all duration-200",
               {
                 " ": isPending || captchaState.validating,
-                "bg-blue-600 text-white dark:hover:text-black": !isPending && !captchaState.validating,
+                "bg-violet-600  text-white hover:bg-violet-800": !isPending && !captchaState.validating,
               }
             )}
           >

@@ -24,6 +24,8 @@ export async function signinMagic(
       };
     }
     await signIn("http-email", { email: data.email });
+     
+
     return {
       message: `An email link has been sent to ${data.email}. Please check your inbox.`,
       success: true,

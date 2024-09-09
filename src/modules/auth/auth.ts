@@ -1,4 +1,4 @@
-import NextAuth, { AuthError } from "next-auth";
+import NextAuth from "next-auth";
 import authConfig from "./auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { UserRole } from "@prisma/client";
@@ -15,12 +15,8 @@ export const nextAuth = NextAuth({
   },
   events: {
     linkAccount: async ({ user }) => {
-      db.user.update({
-        where: { id: user.id },
-        data: {
-          emailVerified: new Date(),
-        },
-      });
+      if (!user.id) return
+      await userRepository.verifyUserEmail(user.id)
     },
   },
   callbacks: {
@@ -82,7 +78,6 @@ export const nextAuth = NextAuth({
       name: "Email",
       sendVerificationRequest: sendVerificationRequest,
       options: {
-       
       },
       maxAge: 60 * 60,
       from: "onboarding@codestacklab.com",
