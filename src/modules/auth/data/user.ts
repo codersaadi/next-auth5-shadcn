@@ -22,6 +22,15 @@ class UserRepository {
       throw new Error('Could not fetch user by ID');
     }
   }
+  async verifyUserEmail(id : string){
+    await db.user.update({
+      where: { id },
+      data: {
+        emailVerified: new Date(),
+      },
+    });
+  }
+
 }
 
 const userRepository = new UserRepository();

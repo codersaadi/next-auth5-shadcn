@@ -1,11 +1,10 @@
-import NextAuth, { AuthError } from "next-auth";
+import NextAuth from "next-auth";
 import authConfig from "./auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { UserRole } from "@prisma/client";
 import { db } from "@/lib/db";
 import userRepository from "./data/user";
 import { sendVerificationRequest } from "./sendRequest";
-import { createVerificationToken } from "./data";
 
 export const nextAuth = NextAuth({
   pages: {
@@ -16,12 +15,8 @@ export const nextAuth = NextAuth({
   },
   events: {
     linkAccount: async ({ user }) => {
-      db.user.update({
-        where: { id: user.id },
-        data: {
-          emailVerified: new Date(),
-        },
-      });
+      if (!user.id) return
+      await userRepository.verifyUserEmail(user.id)
     },
   },
   callbacks: {
